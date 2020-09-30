@@ -1,0 +1,42 @@
+{
+  "name": "buy-sell",
+  "version": "1.0.0",
+  "description": "Куплю. Продам",
+  "main": "./src/service/service.js",
+  "scripts": {
+    "start": "node ./src/service/service.js",
+    "fill-db": "node ./src/service/service.js -- --fill-db 100",
+    "start-server": "nodemon ./src/service/service.js --server 3000 | pino-pretty",
+    "start-f-server": "nodemon ./src/express/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InNOcentos/buy-sell.git"
+  },
+  "author": "Boris",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/InNOcentos/buy-sell/issues"
+  },
+  "homepage": "https://github.com/InNOcentos/buy-sell#readme",
+  "devDependencies": {
+    "nodemon": "2.0.4",
+    "pino-pretty": "4.1.0"
+  },
+  "dependencies": {
+    "bcrypt": "5.0.0",
+    "chalk": "^4.1.0",
+    "cookie-parser": "1.4.5",
+    "dotenv": "8.2.0",
+    "express": "4.17.1",
+    "joi": "17.2.1",
+    "jsonwebtoken": "8.5.1",
+    "multer": "1.4.2",
+    "nanoid": "3.1.12",
+    "pg": "8.3.3",
+    "pino": "6.5.1",
+    "pug": "2.0.4",
+    "request": "2.88.2",
+    "sequelize": "6.3.4"
+  }
+}

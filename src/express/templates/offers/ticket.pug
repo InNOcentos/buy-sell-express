@@ -1,0 +1,76 @@
+extends ../layout.pug
+
+block content
+  main.page-content
+    section.ticket
+      .ticket__wrapper
+        h1.visually-hidden Карточка объявления
+        .ticket__content
+          .ticket__img
+            img(src='/img/' + offer.picture, srcset='/img/' + offer.picture + '@2x 2x', alt=offer.title)
+          .ticket__info
+            h2.ticket__title #{offer.title}
+            .ticket__header
+              p.ticket__price
+                span.js-sum #{offer.sum}
+                |  ₽
+              p.ticket__action 
+                if (offer.type = 'sell')
+                 | ПРОДАМ
+                else if (offer.type = 'buy')
+                 | КУПЛЮ
+            .ticket__desc
+              p #{offer.description}
+            .ticket__data
+              p
+                b Дата добавления:
+                span #{offer.createdDate}
+              p
+                b Автор:
+                a(href="#") #{user.firstName} #{user.lastName}
+              p
+                b Контакты:
+                a(href=`mailto:${user.email}`) #{user.email}
+            ul.ticket__tags
+              each category,index in categories
+                li
+                  a.category-tile.category-tile--small(href=`/offers/category/${categories[index].id}`)
+                    span.category-tile__image
+                      img(src=`/img/cat0` + category.id + `.jpg`,srcset=`/img/cat0` + category.id + `@2x.jpg`, alt=`Иконка категории`)
+                    span.category-tile__label #{offer.category[index]}
+        .ticket__comments
+          h2.ticket__subtitle Коментарии
+          if userData['id']
+            .ticket__comment-form
+            form.form.comment-form(action=`/offers/${offer.id}` method="post")
+              .comment-form__header
+                a.comment-form__avatar.avatar(href="#")
+                  img(src=`/img/` + userData.avatar, alt="Аватар пользователя")
+                p.comment-form__author Вам слово
+              .comment-form__field
+                .form__field
+                  textarea#comment-field.js-field(name="comment" cols="30" rows="10")
+                  label(for="comment-field") Текст комментария
+                  if errorsArr
+                    each errorObj in errorsArr
+                      if errorObj.path[0] == `comment`
+                        span.validation_error--custom(style="display: block !important;") #{errorObj.message}
+              button.comment-form__button.btn.btn--white.js-button(type="submit" disabled="") Отправить
+          else 
+            .ticket__warning
+              p
+                | Отправка комментариев доступна 
+                br
+                | только для зарегистрированных пользователей.
+              a.btn.btn--big(href='/sign-up') Вход и регистрация
+          .ticket__comments-list
+            ul.comments-list
+              each comment in comments
+                li
+                  .comment-card
+                    .comment-card__header
+                      a.comment-card__avatar.avatar(href="#")
+                        img(src=`/img/` + comment.user.avatar,alt="Аватар пользователя")
+                      p.comment-card__author #{comment.user.firstName} #{comment.user.lastName}
+                    .comment-card__content
+                      p #{comment.message}

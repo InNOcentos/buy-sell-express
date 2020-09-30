@@ -1,0 +1,61 @@
+extends layout.pug
+
+block content
+  main.page-content
+      section.sign-up
+        form.sign-up__form.form(action="/sign-up" method="post" enctype="multipart/form-data" autocomplete="off")
+          .sign-up__title
+            h2 Регистрация
+            a.sign-up__link(href="/login") Вход
+          if userData && userData.avatar
+            .sign-up__avatar-container.js-preview-container.uploaded
+              .sign-up__avatar.js-preview
+                img(src='/img/' + userData.avatar, srcset='/img/' + (userData.avatar.replace(/\.\w+$/, '')) + '@2x' + (userData.avatar.match(/\.\w+$/)) + ' 2x', alt=`Ваш аватар`)
+              .sign-up__field-avatar
+                input#avatar.visually-hidden.js-file-field(type="file" name="avatar")
+                label(for="avatar")
+                  span.sign-up__text-upload Загрузить аватар…
+                  span.sign-up__text-another Загрузить другой аватар…
+          else
+            .sign-up__avatar-container.js-preview-container
+              .sign-up__avatar.js-preview
+              .sign-up__field-avatar
+                input#avatar.visually-hidden.js-file-field(type="file" name="avatar")
+                label(for="avatar")
+                  span.sign-up__text-upload Загрузить аватар…
+                  span.sign-up__text-another Загрузить другой аватар…
+          if errorsArr
+            each errorObj in errorsArr
+              if errorObj.path[0] == `avatar`
+                div(style="margin-top: -10px;") #{errorObj.message}
+          .form__field.sign-up__field
+            input#user-name.js-field(type="text" name="user_name", value=(userData && userData.name  ? `${userData.name[0]} ${userData.name[1]}` : ``))
+            label(for="user_name") Имя и фамилия
+            if errorsArr
+              each errorObj in errorsArr
+                if errorObj.path[0] == `firstName` || errorObj.path[0] == `lastName`
+                  div #{errorObj.message}
+          .form__field.sign-up__field
+            input#user-email.js-field(type="email" name="user_email", value=(userData && userData.email ? userData.email : ''))
+            label(for="user_email") Эл. почта
+            if errorsArr
+              each errorObj in errorsArr
+                if errorObj.path[0] == `email`
+                  div #{errorObj.message}
+            if userAlreadyExist
+              div #{userAlreadyExist}
+          .form__field.sign-up__field
+            input#user-password.js-field(type="password" name="user_password")
+            label(for="user_password") Пароль
+            if errorsArr
+              each errorObj in errorsArr
+                if errorObj.path[0] == `password`
+                  div #{errorObj.message}
+          .form__field.sign-up__field
+            input#user-password-again.js-field(type="password" name="user_password_repeat")
+            label(for="user_password_repeat") Пароль еще раз
+            if errorsArr
+              each errorObj in errorsArr
+                if errorObj.path[0] == `repeat`
+                  div #{errorObj.message}
+          button.sign-up__button.btn.btn--medium.js-button(type="submit" disabled="") Создать аккаунт

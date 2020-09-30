@@ -1,0 +1,39 @@
+extends layout.pug
+
+block content
+    main.page-content
+    section.tickets-list
+      h2.visually-hidden Самые новые предложения
+      .tickets-list__wrapper
+        .tickets-list__header
+          a.tickets-list__btn.btn.btn--big(href='/offers/add')
+            span Новая публикация
+        ul
+          each offer, index in offers
+            li.tickets-list__item.js-card
+              div(class='ticket-card ticket-card--color0' + (index.toString().slice(-1)))
+                .ticket-card__img
+                  img(src='/img/' + offer.picture, srcset='/img/' + (offer.picture.replace(/\.\w+$/, '')) + '@2x' + (offer.picture.match(/\.\w+$/)) +' 2x', alt=offer.title)
+                .ticket-card__info
+                  span.ticket-card__label
+                    if offer.type === 'sell'
+                      | Продам
+                    else if offer.type === 'buy'
+                      | Куплю
+                  .ticket-card__categories
+                    each category in offer.category
+                      a(href='#') #{category}
+                  .ticket-card__header
+                    h3.ticket-card__title
+                      a(href=`/offers/${offer.id}`) #{offer.title}
+                    p.ticket-card__price
+                      span.js-sum #{offer.sum}
+                      |  ₽
+                  .ticket-card__desc
+                    p #{offer.description}
+                a.ticket-card__del(href=`/offers/edit/${offer.id}`) Редактировать
+                form(action=`/my`, method='POST', autocomplete='off')
+                  input.visually-hidden(type='text', name='offerId',value=`${offer.id}`)
+                  button.ticket-card__del.js-delete(type='submit',style="margin-top:0!important") Удалить
+                  
+        include ./partials/pagination

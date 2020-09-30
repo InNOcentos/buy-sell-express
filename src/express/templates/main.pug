@@ -1,0 +1,63 @@
+extends layout.pug
+
+block content
+  main.page-content
+    include partials/categories.pug
+    section.tickets-list
+      h2.visually-hidden Самые новые предложения
+      .tickets-list__wrapper
+        .tickets-list__header
+          p.tickets-list__title Самое свежее
+        ul
+          each offer, index in offers
+            li.tickets-list__item
+              div(class='ticket-card ticket-card--color0' + (index.toString().slice(-1)))
+                .ticket-card__img
+                  img(src='/img/' + offer.picture, srcset='/img/' + (offer.picture.replace(/\.\w+$/, '')) + '@2x' + (offer.picture.match(/\.\w+$/)) +' 2x', alt=offer.title)
+                .ticket-card__info
+                  span.ticket-card__label
+                    if offer.type === 'sell'
+                      | Продам
+                    else if offer.type === 'buy'
+                      | Куплю
+                  .ticket-card__categories
+                    each category,index in offer.category
+                      a(href = `#`) #{category}
+                  .ticket-card__header
+                    h3.ticket-card__title
+                      a(href=`/offers/${offer.id}`) #{offer.title}
+                    p.ticket-card__price
+                      span.js-sum #{offer.sum}
+                      |  ₽
+                  .ticket-card__desc
+                    p #{offer.description}
+        include ./partials/pagination
+    section.tickets-list
+      h2.visually-hidden Самые ценные предложения
+      .tickets-list__wrapper
+        .tickets-list__header
+          p.tickets-list__title Самые ценные
+        ul
+          each offer, index in valuableOffers
+            li.tickets-list__item
+              div(class='ticket-card ticket-card--color0' + (index.toString().slice(-1)))
+                .ticket-card__img
+                  img(src='/img/' + offer.picture, srcset='/img/' + (offer.picture.replace(/\.\w+$/, '')) + '@2x' + (offer.picture.match(/\.\w+$/)) +' 2x', alt=offer.title)
+                .ticket-card__info
+                  span.ticket-card__label
+                    if offer.type === 'sell'
+                      | Продам
+                    else if offer.type === 'buy'
+                      | Куплю
+                  .ticket-card__categories
+                    each category in offer.category
+                      a(href=`#`) #{category}
+                  .ticket-card__header
+                    h3.ticket-card__title
+                      a(href=`/offers/${offer.id}`) #{offer.title}
+                    p.ticket-card__price
+                      span.js-sum #{offer.sum}
+                      |  ₽
+                  .ticket-card__desc
+                    p #{offer.description}
+        

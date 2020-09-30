@@ -1,0 +1,5 @@
+.tickets-list__pagination
+  ul.pagination
+    each page in pages
+      li
+        a(class=(page.isActive ? 'active' : '') href=page.href) #{page.title}

@@ -1,0 +1,40 @@
+extends layout.pug
+
+block content
+  main.page-content
+    section.comments
+      .comments__wrapper
+        h1.visually-hidden Страница комментариев
+        if !offers[0]
+          p.comments__message У ваших публикаций еще нет комментариев.
+        else
+          each offer, index in offers
+            .comments__block
+              .comments__header
+                a.announce-card(href=`/offers/${offer.id}`)
+                  h2.announce-card__title #{offer.title}
+                  span.announce-card__info
+                    span.announce-card__price ₽ #{offer.sum}
+                    span.announce-card__type
+                      if offer.type === 'sell'
+                        | Продам
+                      else if offer.type === 'buy'
+                        | Куплю
+              ul.comments-list
+                if !userComments[index][0]
+                  .ticket__message
+                        p У этой публикации еще нет ни одного комментария.
+                else
+                  each comment in userComments[index]
+                      li.js-card
+                        .comment-card
+                          .comment-card__header
+                            a.comment-card__avatar.avatar(href='#')
+                              img(src='/img/' + comment.user.avatar, srcset='/img/' + `${comment.user.avatar} 2x`, alt='Аватар пользователя')
+                            p.comment-card__author #{comment.user.firstName} #{comment.user.lastName} 
+                          .comment-card__content
+                            p #{comment.message}
+                          form(action=`/my/comments`, method='POST', autocomplete='off')
+                            input.visually-hidden(type='text', name='commentId',value=`${comment.id}`)
+                            input.visually-hidden(type='text', name='offerId',value=`${offer.id}`)
+                            button.comment-card__delete.js-delete(type='submit') Удалить

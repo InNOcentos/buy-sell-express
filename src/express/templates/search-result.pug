@@ -1,0 +1,37 @@
+extends layout.pug
+
+block content
+  main.page-content
+    section.search-results
+      h1.visually-hidden Результаты поиска
+      .search-results__wrapper
+        p.search-results__label
+          | Найдено публикаций:
+          span.js-results  #{results.length}
+        ul.search-results__list
+          each result, index in results
+            li.search-results__item
+              div(class='ticket-card ticket-card--color0' + (index.toString().slice(-1)))
+                .ticket-card__img
+                  img(src='/img/' + result.picture, srcset='/img/' + result.picture + '@2x 2x', alt=result.title)
+                .ticket-card__info
+                  span.ticket-card__label
+                    if result.type === 'sell'
+                      | Продам
+                    else if result.type === 'buy'
+                      | Куплю
+                  .ticket-card__categories
+                    if (result.category)
+                      each category in result.category
+                        a(href='#') #{category}
+                    else if (result.categories)
+                      a(href='#') #{result.categories[0].title}
+                  .ticket-card__header
+                    h3.ticket-card__title
+                      a(href='#') #{result.title}
+                    p.ticket-card__price
+                      span.js-sum #{result.sum}
+                      |  ₽
+                  .ticket-card__desc
+                    p Куплю монстеру зеленую в хорошем зеленом состоянии, буду поливать...
+    include partials/tickets-list.pug

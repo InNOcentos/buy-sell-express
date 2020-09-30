@@ -1,0 +1,64 @@
+extends ../layout.pug
+
+block content
+  main.page-content
+    section.ticket-form
+      .ticket-form__wrapper
+        h1.ticket-form__title Редактировать публикацию
+        .ticket-form__tile
+          form.ticket-form__form.form(action=`/offers/edit/${offer.id}`, enctype="multipart/form-data" , method='POST', autocomplete='off')
+            .ticket-form__avatar-container.js-preview-container.uploaded
+              .ticket-form__avatar.js-preview
+                img(src='/img/' + offer.picture, srcset='/img/' + offer.picture + '@2x 2x', alt=offer.title)
+              .ticket-form__field-avatar
+                input#avatar.visually-hidden.js-file-field(type='file', name='avatar')
+                label(for='avatar')
+                  span.ticket-form__text-upload Загрузить фото…
+                  span.ticket-form__text-another Загрузить другое фото…
+              if errorsArr
+                each errorObj in errorsArr
+                  if errorObj.path[0] == `picture`
+                    div.validation_error--custom(style="margin: 10px 0 0 0") #{errorObj.message}
+            .ticket-form__content
+              .ticket-form__row
+                .form__field
+                  input#ticket-name.js-field(type='text', name='title', value=(offer && offer.title ? offer.title : ''), required)
+                  label(for='ticket-name') Название
+                  if errorsArr
+                    each errorObj in errorsArr
+                      if errorObj.path[0] == `title`
+                        div.validation_error--custom(style="margin: 6px 0 0 0") #{errorObj.message}
+              .ticket-form__row
+                .form__field
+                  textarea#comment-field.js-field(name='description', cols='30', rows='10') #{offer.description}
+                  label(for='comment-field') Описание
+              if errorsArr
+                each errorObj in errorsArr
+                  if errorObj.path[0] == `description`
+                    span.validation_error--custom(style="display: block !important; margin:-35px 0 20px 0") #{errorObj.message}
+              .ticket-form__row
+                select#category-field.form__select.js-multiple-select(name='category', data-label='Выбрать категорию публикации', multiple)
+                  each category in categories
+                    option(value=(category.id), selected=(offer && offer.category[0] ? selectedOffers.includes(category.title) : false)) #{category.title}
+              if errorsArr
+                each errorObj in errorsArr
+                  if errorObj.path[0] == `category`
+                    span.validation_error--custom(style="display: block !important; margin:-27px 0 20px 0") #{errorObj.message}
+              .ticket-form__row
+                .form__field.form__field--price
+                  input#price-field.js-field.js-price(type='number', name='sum',value=offer.sum)
+                  label(for='price-field') Цена
+                .form__switch.switch
+                  .switch__item
+                    input#buy-field.visually-hidden(type='radio', name='type', value='buy', checked=(offer.type === 'buy'))
+                    label.switch__button(for='buy-field') Куплю
+                  .switch__item
+                    input#sell-field.visually-hidden(type='radio', name='type', value='sell' checked=(offer.type === 'sell'))
+                    label.switch__button(for='sell-field') Продам
+              if errorsArr
+                ul(style="list-style-type: none;padding-left: 0;margin-top:-30px")
+                  each errorObj in errorsArr
+                    if errorObj.path[0] == `type` || errorObj.path[0] == 'sum'
+                      li
+                        span.validation_error--custom(style="display: block !important;margin-bottom: 5px;") #{errorObj.message}
+            button.form__button.btn.btn--medium.js-button(type='submit') Сохранить
