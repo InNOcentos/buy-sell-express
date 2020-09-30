@@ -27,4 +27,4 @@ app.use((req, res) => {
     res.status(HttpCode.NOT_FOUND).render(`errors/404`);
 });
 
-app.listen(DEFAULT_PORT);
+app.listen(process.env.PORT || DEFAULT_PORT);
