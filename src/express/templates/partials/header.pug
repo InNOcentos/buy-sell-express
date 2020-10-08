@@ -14,7 +14,7 @@ if userData['id']
         .search__icon
         .search__close-btn
       a.header__avatar.avatar(href='/my')
-        img(src='/img/' + userData.image, srcset=`/img/` + userData.avatar, alt='Аватар пользователя')
+        img(src='/img/' + userData.avatar, srcset=`/img/` + userData.avatar, alt='Аватар пользователя')
       a.header__input(href='/login') Вход и регистрация
 else
   header.header
